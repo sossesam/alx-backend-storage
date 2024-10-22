@@ -5,6 +5,7 @@ import bson
 
 with open('dump/logs/nginx.bson', 'rb') as f:
     data = bson.decode_all(f.read())
+f.close()
 method = ["GET", "POST", "PUT", "PATCH", "DELETE"]
 count = len(data)
 get = len([x for x in data if x['method'] == "GET"])
@@ -20,3 +21,4 @@ print("Methods:")
 for me in method_count.keys():
     print(f"  method {me}: {method_count[me]}")
 print(f"{status} status check")
+
