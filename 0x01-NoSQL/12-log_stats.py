@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
+from pymongo import MongoClient
 """ 12-main """
-import bson
-
-
-with open('dump/logs/nginx.bson', 'rb') as f:
-    data = bson.decode_all(f.read())
-f.close()
+client = MongoClient("mongodb://localhost:27017")
+db = client["logs"]
+col = db["nginx"]
+data = col.find()
 method = ["GET", "POST", "PUT", "PATCH", "DELETE"]
 count = len(data)
 get = len([x for x in data if x['method'] == "GET"])
