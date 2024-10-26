@@ -11,10 +11,28 @@ def count_calls(method):
         return method(self, *args, **kwargs)
     return wrapper
 
+def call_history(method):
+    @wraps(method)
+    def wrapper(self, *args, **kwargs):
+        base_key = method.__qualname__
+        input_key = f"{base_key}:inputs"
+        output_key = f"{base_key}:outputs"
+        input_data = str(args)
+        self._redis.rpush(input_key, input_data)
+        output = method(self, *args,**kwargs)
+        output_data = str(output)
+        self._redis.rpush(output_key, output_data)
+        return output
+    return wrapper
+
+
+
 class Cache:
     def __init__(self):
         self._redis = redis.Redis(host="localhost", port=6379, db=0)
         self._redis.flushdb()
+
+    @call_history
     @count_calls
     def store(self, data):
         id = str(uuid.uuid4())
