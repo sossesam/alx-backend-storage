@@ -25,13 +25,9 @@ def call_history(method):
         return output
     return wrapper
 
-def replay(method) -> None:
-    """
-    Display the history of calls of a particular function.
+def replay(method):
 
-    Args:
-        method: The method to display the call history for.
-    """
+
     cache = method.__self__
     input_key = f"{method.__qualname__}:inputs"
     output_key = f"{method.__qualname__}:outputs"
