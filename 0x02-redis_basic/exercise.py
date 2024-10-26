@@ -37,7 +37,8 @@ def replay(method):
     outputs = cache._redis.lrange(output_key, 0, -1)
     print(f"{method.__qualname__} was called {len(inputs)} times:")
     for input, output in zip(inputs, outputs):
-        print(f"{method.__qualname__}(*{input.decode('utf-8')}) -> {output.decode('utf-8')}")
+        print(f"{method.__qualname__}(*{input.decode('utf-8')}) ->
+              {output.decode('utf-8')}")
 
 
 class Cache:
