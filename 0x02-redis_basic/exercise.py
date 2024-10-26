@@ -3,6 +3,7 @@ import redis
 import uuid
 from functools import wraps
 
+
 def count_calls(method):
     @wraps(method)
     def wrapper(self, *args, **kwargs):
@@ -10,6 +11,7 @@ def count_calls(method):
         self._redis.incr(key)
         return method(self, *args, **kwargs)
     return wrapper
+
 
 def call_history(method):
     @wraps(method)
@@ -19,7 +21,7 @@ def call_history(method):
         output_key = f"{base_key}:outputs"
         input_data = str(args)
         self._redis.rpush(input_key, input_data)
-        output = method(self, *args,**kwargs)
+        output = method(self, *args, **kwargs)
         output_data = str(output)
         self._redis.rpush(output_key, output_data)
         return output
@@ -35,8 +37,8 @@ def replay(method):
     outputs = cache._redis.lrange(output_key, 0, -1)
     print(f"{method.__qualname__} was called {len(inputs)} times:")
     for input, output in zip(inputs, outputs):
-        print(f"{method.__qualname__}(*{input.decode('utf-8')}) -> {output.decode('utf-8')}")
-
+        print(f"{method.__qualname__}(*{input.decode('utf-8')})
+              -> {output.decode('utf-8')}")
 
 
 class Cache:
@@ -49,23 +51,23 @@ class Cache:
     def store(self, data):
         id = str(uuid.uuid4())
         self._redis.set(id, data)
-        
+
         return id
-    
+
     def get(self, key, fn=None):
         data = self._redis.get(key)
 
         if data is None:
             return data
-        
+
         if fn:
             new_data = fn(data)
             return new_data
         else:
             return data
-        
+
     def get_str(self, key):
         return self.get(key, lambda d: d.decode('utf-8'))
-    
+
     def get_int(self, key):
         return self.get(key, lambda d: int(d))
