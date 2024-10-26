@@ -25,8 +25,8 @@ def call_history(method):
         return output
     return wrapper
 
-def replay(method):
 
+def replay(method):
 
     cache = method.__self__
     input_key = f"{method.__qualname__}:inputs"
