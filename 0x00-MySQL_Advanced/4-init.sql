@@ -1,6 +1,7 @@
 -- Initial
 DROP TABLE IF EXISTS items;
 DROP TABLE IF EXISTS orders;
+DROP TABLE IF EXISTS purchase;
 
 CREATE TABLE IF NOT EXISTS items (
     name VARCHAR(255) NOT NULL,
@@ -8,6 +9,11 @@ CREATE TABLE IF NOT EXISTS items (
 );
 
 CREATE TABLE IF NOT EXISTS orders (
+    item_name VARCHAR(255) NOT NULL,
+    number int NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS purchase (
     item_name VARCHAR(255) NOT NULL,
     number int NOT NULL
 );
